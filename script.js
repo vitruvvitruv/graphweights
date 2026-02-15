@@ -90,10 +90,18 @@ function update() {
     computeSums();
     svg.selectAll(".link text").text(d => d.weight);
     svg.selectAll(".node text").text(d => d.sum);
+    svg.selectAll(".link").classed("red", d => d.source.sum === d.target.sum);
 }
 
 function drawGraph(graphKey) {
     currentGraph = JSON.parse(JSON.stringify(graphs[graphKey])); // deep copy
+
+    // Resolve link source/target to node objects
+    currentGraph.links.forEach(link => {
+        link.source = currentGraph.nodes.find(n => n.id === link.source);
+        link.target = currentGraph.nodes.find(n => n.id === link.target);
+    });
+
     computeSums();
 
     if (svg) svg.remove();
@@ -150,6 +158,8 @@ function drawGraph(graphKey) {
 
         node.attr("transform", d => `translate(${d.x},${d.y})`);
     });
+
+    update(); // Set initial classes and texts
 }
 
 d3.select("#graph-select").on("change", function() {

@@ -39,8 +39,10 @@ h1 {
     stroke-width: 2px;
 }
 
-.link text {
-    font-size: 10px;
-    fill: #333;
-    text-anchor: middle;
+.link.red line {
+    stroke: red;
+}
+
+.link.red text {
+    fill: red;
 }
