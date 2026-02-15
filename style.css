@@ -20,7 +20,7 @@ h1 {
     border: 1px solid #ccc;
 }
 
-.node {
+.node circle {
     fill: #69b3a2;
     stroke: #fff;
     stroke-width: 2px;
