@@ -142,8 +142,18 @@ function drawGraph(graphKey) {
         .text(d => d.sum);
 
     simulation = d3.forceSimulation(currentGraph.nodes)
-        .force("link", d3.forceLink(currentGraph.links).id(d => d.id).distance(150))
-        .force("charge", d3.forceManyBody().strength(-400))
+        .force("link", d3.forceLink(currentGraph.links)
+            .id(d => d.id)
+            .distance(220)          // vorher 150
+            .strength(0.8)
+        )
+        .force("charge", d3.forceManyBody()
+            .strength(-900)         // vorher -400
+        )
+        .force("collision", d3.forceCollide()
+            .radius(40)             // Kreisradius 25 → also >25
+            .strength(1)
+        )
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     simulation.on("tick", () => {
