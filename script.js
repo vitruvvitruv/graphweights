@@ -112,31 +112,31 @@ function drawGraph(graphKey) {
 
     const filter = defs.append("filter")
         .attr("id", "green-glow")
-        .attr("x", "-200%")
-        .attr("y", "-200%")
-        .attr("width", "400%")
-        .attr("height", "400%");
+        .attr("x", "-300%")
+        .attr("y", "-300%")
+        .attr("width", "600%")
+        .attr("height", "600%");
 
     filter.append("feGaussianBlur")
-        .attr("in", "SourceGraphic")
-        .attr("stdDeviation", 6)
+        .attr("in", "SourceAlpha")
+        .attr("stdDeviation", 12)          // deutlich stärker
         .attr("result", "blur");
 
-    filter.append("feColorMatrix")
-        .attr("in", "blur")
-        .attr("type", "matrix")
-        .attr("values", `
-            0 0 0 0 0
-            0 1 0 0 0
-            0 0 0 0 0
-            0 0 0 1 0
-        `)
-        .attr("result", "greenBlur");
+    filter.append("feFlood")
+        .attr("flood-color", "#00ff66")    // kräftiges Neon-Grün
+        .attr("flood-opacity", 1)
+        .attr("result", "color");
+
+    filter.append("feComposite")
+        .attr("in", "color")
+        .attr("in2", "blur")
+        .attr("operator", "in")
+        .attr("result", "glow");
 
     const feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode").attr("in", "greenBlur");
+    feMerge.append("feMergeNode").attr("in", "glow");
     feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-        
+
     const link = svg.selectAll(".link")
         .data(currentGraph.links)
         .enter().append("g")
