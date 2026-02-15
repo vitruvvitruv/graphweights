@@ -108,10 +108,6 @@ function drawGraph(graphKey) {
     if (svg) svg.remove();
     svg = container.append("svg").attr("width", width).attr("height", height);
 
-    const feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode").attr("in", "glow");
-    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
     const link = svg.selectAll(".link")
         .data(currentGraph.links)
         .enter().append("g")
