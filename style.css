@@ -24,6 +24,7 @@ h1 {
     fill: #69b3a2;
     stroke: #fff;
     stroke-width: 2px;
+    font-weight: normal;
 }
 
 .node text {
@@ -48,7 +49,7 @@ h1 {
 }
 
 .link.green line {
-    stroke: green;
+    filter: url(#green-glow);
 }
 
 .link.green text {

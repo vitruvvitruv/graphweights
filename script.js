@@ -108,6 +108,22 @@ function drawGraph(graphKey) {
     if (svg) svg.remove();
     svg = container.append("svg").attr("width", width).attr("height", height);
 
+    const defs = svg.append("defs");
+
+    const filter = defs.append("filter")
+        .attr("id", "green-glow")
+        .attr("x", "-50%")
+        .attr("y", "-50%")
+        .attr("width", "200%")
+        .attr("height", "200%");
+
+    filter.append("feDropShadow")
+        .attr("dx", 0)
+        .attr("dy", 0)
+        .attr("stdDeviation", 6)
+        .attr("flood-color", "#2efc00")   // hellgrün
+        .attr("flood-opacity", 0.8);
+        
     const link = svg.selectAll(".link")
         .data(currentGraph.links)
         .enter().append("g")
