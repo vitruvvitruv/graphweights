@@ -40,6 +40,14 @@ h1 {
     stroke-width: 2px;
 }
 
+.link.red line {
+    stroke: red;
+}
+
+.link.red text {
+    fill: red;
+}
+
 .link.green line {
     stroke: green;
 }
