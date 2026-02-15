@@ -76,7 +76,7 @@ let svg = null;
 
 const container = d3.select("#graph-container");
 const width = container.node().getBoundingClientRect().width;
-const height = 600;
+const height = 700;
 
 function computeSums() {
     currentGraph.nodes.forEach(node => {
@@ -90,7 +90,8 @@ function update() {
     computeSums();
     svg.selectAll(".link text").text(d => d.weight);
     svg.selectAll(".node text").text(d => d.sum);
-    svg.selectAll(".link").classed("red", d => d.source.sum === d.target.sum);
+    const hasConflict = currentGraph.links.some(d => d.source.sum === d.target.sum);
+    svg.selectAll(".link").classed("red", d => d.source.sum === d.target.sum).classed("green", !hasConflict);
 }
 
 function drawGraph(graphKey) {
@@ -135,14 +136,14 @@ function drawGraph(graphKey) {
         .attr("class", "node");
 
     node.append("circle")
-        .attr("r", 20);
+        .attr("r", 25);
 
     node.append("text")
         .text(d => d.sum);
 
     simulation = d3.forceSimulation(currentGraph.nodes)
-        .force("link", d3.forceLink(currentGraph.links).id(d => d.id).distance(100))
-        .force("charge", d3.forceManyBody().strength(-300))
+        .force("link", d3.forceLink(currentGraph.links).id(d => d.id).distance(150))
+        .force("charge", d3.forceManyBody().strength(-400))
         .force("center", d3.forceCenter(width / 2, height / 2));
 
     simulation.on("tick", () => {
