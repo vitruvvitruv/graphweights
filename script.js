@@ -112,17 +112,30 @@ function drawGraph(graphKey) {
 
     const filter = defs.append("filter")
         .attr("id", "green-glow")
-        .attr("x", "-50%")
-        .attr("y", "-50%")
-        .attr("width", "200%")
-        .attr("height", "200%");
+        .attr("x", "-200%")
+        .attr("y", "-200%")
+        .attr("width", "400%")
+        .attr("height", "400%");
 
-    filter.append("feDropShadow")
-        .attr("dx", 0)
-        .attr("dy", 0)
+    filter.append("feGaussianBlur")
+        .attr("in", "SourceGraphic")
         .attr("stdDeviation", 6)
-        .attr("flood-color", "#2efc00")   // hellgrün
-        .attr("flood-opacity", 0.8);
+        .attr("result", "blur");
+
+    filter.append("feColorMatrix")
+        .attr("in", "blur")
+        .attr("type", "matrix")
+        .attr("values", `
+            0 0 0 0 0
+            0 1 0 0 0
+            0 0 0 0 0
+            0 0 0 1 0
+        `)
+        .attr("result", "greenBlur");
+
+    const feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode").attr("in", "greenBlur");
+    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
         
     const link = svg.selectAll(".link")
         .data(currentGraph.links)

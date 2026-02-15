@@ -24,7 +24,6 @@ h1 {
     fill: #69b3a2;
     stroke: #fff;
     stroke-width: 2px;
-    font-weight: normal;
 }
 
 .node text {
@@ -32,6 +31,7 @@ h1 {
     fill: #fff;
     text-anchor: middle;
     dominant-baseline: middle;
+    font-weight: normal;
 }
 
 .link {
