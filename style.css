@@ -49,7 +49,9 @@ h1 {
 }
 
 .link.green line {
-    filter: url(#green-glow);
+    stroke: green;
+    stroke-opacity: 50%;
+    stroke-width: 4px;
 }
 
 .link.green text {
