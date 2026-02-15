@@ -50,7 +50,7 @@ h1 {
 
 .link.green line {
     stroke: green;
-    stroke-opacity: 50%;
+    stroke-opacity: 0.5;
     stroke-width: 4px;
 }
 
