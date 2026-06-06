@@ -85,6 +85,34 @@ const container = d3.select("#graph-container");
 const width = container.node().getBoundingClientRect().width;
 const height = 700;
 
+function positionNodesOnCircle(nodes, radius) {
+    const angleStep = (2 * Math.PI) / nodes.length;
+    nodes.forEach((node, index) => {
+        node.x = width / 2 + radius * Math.cos(index * angleStep - Math.PI / 2);
+        node.y = height / 2 + radius * Math.sin(index * angleStep - Math.PI / 2);
+    });
+}
+
+function positionNodesOnLine(nodes) {
+    const spacing = Math.min(width / (nodes.length + 1), 120);
+    const startX = (width - spacing * (nodes.length - 1)) / 2;
+    const y = height / 2;
+    nodes.forEach((node, index) => {
+        node.x = startX + index * spacing;
+        node.y = y;
+    });
+}
+
+function applyFixedLayout(graphKey) {
+    if (graphKey === "triangle") {
+        positionNodesOnCircle(currentGraph.nodes, 220);
+    } else if (graphKey === "pentagon") {
+        positionNodesOnCircle(currentGraph.nodes, 240);
+    } else if (graphKey === "path") {
+        positionNodesOnLine(currentGraph.nodes);
+    }
+}
+
 function computeSums() {
     currentGraph.nodes.forEach(node => {
         node.sum = currentGraph.links
@@ -109,6 +137,11 @@ function drawGraph(graphKey) {
         link.source = currentGraph.nodes.find(n => n.id === link.source);
         link.target = currentGraph.nodes.find(n => n.id === link.target);
     });
+
+    const fixedLayout = ["triangle", "path", "pentagon"].includes(graphKey);
+    if (fixedLayout) {
+        applyFixedLayout(graphKey);
+    }
 
     computeSums();
 
@@ -148,22 +181,7 @@ function drawGraph(graphKey) {
     node.append("text")
         .text(d => d.sum);
 
-    simulation = d3.forceSimulation(currentGraph.nodes)
-        .force("link", d3.forceLink(currentGraph.links)
-            .id(d => d.id)
-            .distance(220)          // vorher 150
-            .strength(0.8)
-        )
-        .force("charge", d3.forceManyBody()
-            .strength(-900)         // vorher -400
-        )
-        .force("collision", d3.forceCollide()
-            .radius(40)             // Kreisradius 25 → also >25
-            .strength(1)
-        )
-        .force("center", d3.forceCenter(width / 2, height / 2));
-
-    simulation.on("tick", () => {
+    function renderPositions() {
         link.select("line")
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
@@ -175,7 +193,28 @@ function drawGraph(graphKey) {
             .attr("y", d => (d.source.y + d.target.y) / 2);
 
         node.attr("transform", d => `translate(${d.x},${d.y})`);
-    });
+    }
+
+    if (!fixedLayout) {
+        simulation = d3.forceSimulation(currentGraph.nodes)
+            .force("link", d3.forceLink(currentGraph.links)
+                .id(d => d.id)
+                .distance(220)
+                .strength(0.8)
+            )
+            .force("charge", d3.forceManyBody()
+                .strength(-900)
+            )
+            .force("collision", d3.forceCollide()
+                .radius(40)
+                .strength(1)
+            )
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        simulation.on("tick", renderPositions);
+    } else {
+        renderPositions();
+    }
 
     update(); // Set initial classes and texts
 }
