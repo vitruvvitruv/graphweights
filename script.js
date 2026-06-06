@@ -124,13 +124,11 @@ function positionNodesOnTwoCircles(nodes, innerRadius, outerRadius) {
 
 function applyFixedLayout(graphKey) {
     if (graphKey === "triangle") {
-        positionNodesOnCircle(currentGraph.nodes, 220);
+        positionNodesOnCircle(currentGraph.nodes, 180);
     } else if (graphKey === "pentagon") {
-        positionNodesOnCircle(currentGraph.nodes, 240);
-    } else if (graphKey === "hexagon") {
-        positionNodesOnCircle(currentGraph.nodes, 240);
+        positionNodesOnCircle(currentGraph.nodes, 180);
     } else if (graphKey === "petersen") {
-        positionNodesOnTwoCircles(currentGraph.nodes, 180, 260);
+        positionNodesOnTwoCircles(currentGraph.nodes, 140, 260);
     } else if (graphKey === "path") {
         positionNodesOnLine(currentGraph.nodes);
     }
@@ -161,7 +159,7 @@ function drawGraph(graphKey) {
         link.target = currentGraph.nodes.find(n => n.id === link.target);
     });
 
-    const fixedLayout = ["triangle", "path", "pentagon", "hexagon", "petersen"].includes(graphKey);
+    const fixedLayout = ["triangle", "path", "pentagon", "petersen"].includes(graphKey);
     if (fixedLayout) {
         applyFixedLayout(graphKey);
     }
