@@ -43,11 +43,11 @@ const graphs = {
     petersen: {
         nodes: d3.range(10).map(i => ({id: i})),
         links: [
-            {source: 0, target: 1, weight: 1},
-            {source: 1, target: 2, weight: 1},
-            {source: 2, target: 3, weight: 1},
-            {source: 3, target: 4, weight: 1},
-            {source: 4, target: 0, weight: 1},
+            {source: 0, target: 2, weight: 1},
+            {source: 1, target: 3, weight: 1},
+            {source: 2, target: 4, weight: 1},
+            {source: 3, target: 0, weight: 1},
+            {source: 4, target: 1, weight: 1},
             {source: 5, target: 6, weight: 1},
             {source: 6, target: 7, weight: 1},
             {source: 7, target: 8, weight: 1},
@@ -62,7 +62,7 @@ const graphs = {
     },
     random10: {
         nodes: d3.range(10).map(i => ({id: i})),
-        links: createRandomLinks(10, 0.35)
+        links: createRandomLinks(10, 0.4)
     },
     complete10: {
         nodes: d3.range(10).map(i => ({id: i})),
@@ -103,11 +103,34 @@ function positionNodesOnLine(nodes) {
     });
 }
 
+function positionNodesOnTwoCircles(nodes, innerRadius, outerRadius) {
+    const centerX = width / 2;
+    const centerY = height / 2;
+    const inner = nodes.slice(0, 5);
+    const outer = nodes.slice(5, 10);
+    const innerStep = (2 * Math.PI) / inner.length;
+    const outerStep = (2 * Math.PI) / outer.length;
+
+    inner.forEach((node, index) => {
+        node.x = centerX + innerRadius * Math.cos(index * innerStep - Math.PI / 2);
+        node.y = centerY + innerRadius * Math.sin(index * innerStep - Math.PI / 2);
+    });
+
+    outer.forEach((node, index) => {
+        node.x = centerX + outerRadius * Math.cos(index * outerStep - Math.PI / 2);
+        node.y = centerY + outerRadius * Math.sin(index * outerStep - Math.PI / 2);
+    });
+}
+
 function applyFixedLayout(graphKey) {
     if (graphKey === "triangle") {
         positionNodesOnCircle(currentGraph.nodes, 220);
     } else if (graphKey === "pentagon") {
         positionNodesOnCircle(currentGraph.nodes, 240);
+    } else if (graphKey === "hexagon") {
+        positionNodesOnCircle(currentGraph.nodes, 240);
+    } else if (graphKey === "petersen") {
+        positionNodesOnTwoCircles(currentGraph.nodes, 180, 260);
     } else if (graphKey === "path") {
         positionNodesOnLine(currentGraph.nodes);
     }
@@ -138,7 +161,7 @@ function drawGraph(graphKey) {
         link.target = currentGraph.nodes.find(n => n.id === link.target);
     });
 
-    const fixedLayout = ["triangle", "path", "pentagon"].includes(graphKey);
+    const fixedLayout = ["triangle", "path", "pentagon", "hexagon", "petersen"].includes(graphKey);
     if (fixedLayout) {
         applyFixedLayout(graphKey);
     }
