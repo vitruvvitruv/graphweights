@@ -4,7 +4,7 @@ An interactive web page for visualizing and adjusting weights on graph edges.
 
 ## Features
 
-- Select from predefined graphs: Triangle, Square, Pentagon, Hexagon, Petersen Graph, Complete Graph on 10 Vertices.
+- Select from predefined graphs
 - Each edge starts with weight 1.
 - Left-click on an edge to increase its weight by 1 (max 20).
 - Right-click on an edge to decrease its weight by 1 (min 1).

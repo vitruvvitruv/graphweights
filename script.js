@@ -1,3 +1,15 @@
+function createRandomLinks(nodeCount, probability) {
+    const links = [];
+    for (let i = 0; i < nodeCount; i++) {
+        for (let j = i + 1; j < nodeCount; j++) {
+            if (Math.random() < probability) {
+                links.push({source: i, target: j, weight: 1});
+            }
+        }
+    }
+    return links;
+}
+
 const graphs = {
     triangle: {
         nodes: [{id: 0}, {id: 1}, {id: 2}],
@@ -7,13 +19,15 @@ const graphs = {
             {source: 2, target: 0, weight: 1}
         ]
     },
-    square: {
-        nodes: [{id: 0}, {id: 1}, {id: 2}, {id: 3}],
+    path: {
+        nodes: [{id: 0}, {id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}, {id: 6}],
         links: [
             {source: 0, target: 1, weight: 1},
             {source: 1, target: 2, weight: 1},
             {source: 2, target: 3, weight: 1},
-            {source: 3, target: 0, weight: 1}
+            {source: 3, target: 4, weight: 1},
+            {source: 4, target: 5, weight: 1},
+            {source: 5, target: 6, weight: 1}
         ]
     },
     pentagon: {
@@ -24,17 +38,6 @@ const graphs = {
             {source: 2, target: 3, weight: 1},
             {source: 3, target: 4, weight: 1},
             {source: 4, target: 0, weight: 1}
-        ]
-    },
-    hexagon: {
-        nodes: [{id: 0}, {id: 1}, {id: 2}, {id: 3}, {id: 4}, {id: 5}],
-        links: [
-            {source: 0, target: 1, weight: 1},
-            {source: 1, target: 2, weight: 1},
-            {source: 2, target: 3, weight: 1},
-            {source: 3, target: 4, weight: 1},
-            {source: 4, target: 5, weight: 1},
-            {source: 5, target: 0, weight: 1}
         ]
     },
     petersen: {
@@ -56,6 +59,10 @@ const graphs = {
             {source: 3, target: 8, weight: 1},
             {source: 4, target: 9, weight: 1}
         ]
+    },
+    random10: {
+        nodes: d3.range(10).map(i => ({id: i})),
+        links: createRandomLinks(10, 0.35)
     },
     complete10: {
         nodes: d3.range(10).map(i => ({id: i})),
