@@ -83,7 +83,8 @@ let svg = null;
 
 const container = d3.select("#graph-container");
 const width = container.node().getBoundingClientRect().width;
-const height = 700;
+const height = container.node().getBoundingClientRect().height;
+const nodeRadius = 25;
 
 function positionNodesOnCircle(nodes, radius) {
     const angleStep = (2 * Math.PI) / nodes.length;
@@ -203,6 +204,11 @@ function drawGraph(graphKey) {
         .text(d => d.sum);
 
     function renderPositions() {
+        currentGraph.nodes.forEach(node => {
+            node.x = Math.max(nodeRadius, Math.min(width - nodeRadius, node.x));
+            node.y = Math.max(nodeRadius, Math.min(height - nodeRadius, node.y));
+        });
+
         link.select("line")
             .attr("x1", d => d.source.x)
             .attr("y1", d => d.source.y)
