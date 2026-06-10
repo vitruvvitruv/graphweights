@@ -152,7 +152,14 @@ function update() {
 }
 
 function drawGraph(graphKey) {
-    currentGraph = JSON.parse(JSON.stringify(graphs[graphKey])); // deep copy
+    if (graphKey === "random10") {
+        currentGraph = {
+            nodes: d3.range(10).map(i => ({id: i})),
+            links: createRandomLinks(10, 0.4)
+        };
+    } else {
+        currentGraph = JSON.parse(JSON.stringify(graphs[graphKey])); // deep copy
+    }
 
     // Resolve link source/target to node objects
     currentGraph.links.forEach(link => {
